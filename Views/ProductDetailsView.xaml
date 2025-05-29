@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="NYC.MobileApp.Views.ProductDetailsView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:NYC.MobileApp.Converters"
+    xmlns:models="clr-namespace:NYC.MobileApp.Model"
+    xmlns:viewmodels="clr-namespace:NYC.MobileApp.ViewModel"
+    Title="Product Detail">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBooleanConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Background>
+        <LinearGradientBrush EndPoint="0,1">
+            <GradientStop Color="White"
+                          Offset="0.4" />
+            <GradientStop Color="{StaticResource Primary}"
+                          Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+    <Grid>
+        <Grid IsVisible="{Binding IsLoaded}">
+            <ScrollView Scrolled="ScrollViewScrolled">
+                <StackLayout IsClippedToBounds="True">
+                    <Image
+                        Aspect="AspectFill"
+                        HeightRequest="400"
+                        Source="{Binding ProductDetail.ImageUrl}"
+                        />
+                    
+                    <Frame
+                        CornerRadius="12"
+                        Padding="12"
+                        Margin="8"
+                        BackgroundColor="white"
+                        HasShadow="True">
+                        <StackLayout>
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="16"
+                                HorizontalOptions="StartAndExpand"
+                                Text="{Binding ProductDetail.ItemType}"
+                                TextColor="Black"
+                                VerticalTextAlignment="Center" />
+                            <Label
+                                FontSize="16"
+                                HorizontalOptions="StartAndExpand"
+                                Text="{Binding ProductDetail.Description}"
+                                TextColor="Black"
+                                VerticalTextAlignment="Center" />
+                            
+                            <Label
+                                FontSize="16"
+                                HorizontalOptions="StartAndExpand"
+                                TextColor="Red"
+                                VerticalTextAlignment="Center">
+                                <Label.Text>
+                                    <Binding Path="ProductDetail.MixPrice" StringFormat="MIX: {0}" />
+                                </Label.Text>
+                            </Label>
+                            
+                            <Label
+                                Margin="0,4,0,0"
+                                FontSize="16"
+                                HorizontalOptions="StartAndExpand"
+                                TextColor="Red"
+                                VerticalTextAlignment="Center">
+                                <Label.Text>
+                                    <Binding Path="ProductDetail.SinglePrice" StringFormat="SGL: {0}" />
+                                </Label.Text>
+                            </Label>
+                        </StackLayout>
+                    </Frame>
+                    
+                    <Frame
+                        CornerRadius="12"
+                        Padding="12"
+                        Margin="8,0"
+                        BackgroundColor="white"
+                        HasShadow="True">
+                        <!-- CollectionView grouped by Color -->
+                        <CollectionView ItemsSource="{Binding ProductDetail.ColorGroups}">
+                            <CollectionView.ItemTemplate>
+                                 <DataTemplate x:DataType="models:ColorGroupModel">
+                                    <VerticalStackLayout Spacing="10">
+                                        <!-- Group Header: Color -->
+                                        <Label Text="{Binding Color}" 
+                                               FontSize="20" 
+                                               FontAttributes="Bold"
+                                               TextColor="DarkBlue" />
+
+                                        <!-- Variants in vertical list -->
+                                        <CollectionView ItemsSource="{Binding Items }" 
+                                                        ItemsLayout="VerticalList" 
+                                                        Margin="10,0">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate x:DataType="models:ItemModel">
+                                                    <Border Stroke="LightGray" StrokeThickness="1" Padding="10" Margin="0,5" StrokeShape="RoundRectangle 10">
+                                                        <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
+                                                            <!-- Left Column: Info -->
+                                                            <VerticalStackLayout Grid.Row="0" Grid.Column="0" Spacing="2">
+                                                                <Label Text="{Binding ItemCode}" FontSize="16" FontAttributes="Bold"/>
+                                                                <Label>
+                                                                    <Label.Text>
+                                                                        <Binding Path="Size" StringFormat="Size: {0}" />
+                                                                    </Label.Text>
+                                                                </Label>
+                                                            </VerticalStackLayout>
+
+                                                            <!-- Right Column: Quantity Buttons -->
+                                                            <HorizontalStackLayout Grid.Row="0" Grid.Column="1" Spacing="5" HorizontalOptions="End">
+                                                                <Button Text="−" 
+                                                                        BackgroundColor="Navy" TextColor="White"
+                                                                        WidthRequest="30"
+                                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ProductDetailsViewModel}}, Path=DecreaseQuantityCommand}" 
+                                                                        CommandParameter="{Binding .}" />
+            
+                                                                <Label Text="{Binding Quantity}" FontSize="16" VerticalOptions="Center" HorizontalOptions="Center"/>
+
+                                                                <Button Text="+" 
+                                                                        BackgroundColor="Navy" TextColor="White"
+                                                                        WidthRequest="30"
+                                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ProductDetailsViewModel}}, Path=IncreaseQuantityCommand}" 
+                                                                        CommandParameter="{Binding .}" />
+                                                            </HorizontalStackLayout>
+
+                                                            <!-- Total Label Below -->
+                                                            <Label Grid.Row="1" Grid.Column="1"
+                                                                   Text="{Binding TotalPrice, StringFormat='RM{0:F2}'}"
+                                                                   FontAttributes="Bold"
+                                                                   FontSize="14"
+                                                                   TextColor="Green"
+                                                                   HorizontalOptions="End"
+                                                                   Margin="0,5,0,0"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Frame>
+                </StackLayout>
+            </ScrollView>
+
+            <StackLayout
+                Margin="15"
+                HeightRequest="42"
+                HorizontalOptions="FillAndExpand"
+                Orientation="Horizontal"
+                VerticalOptions="StartAndExpand">
+                <Border
+                    Padding="0"
+                    Background="transparent"
+                    HeightRequest="40"
+                    HorizontalOptions="StartAndExpand"
+                    StrokeShape="RoundRectangle 20,20,20,20"
+                    StrokeThickness="0"
+                    WidthRequest="40">
+
+                    <Label
+                        FontFamily="MaterialIcon"
+                        FontSize="26"
+                        HorizontalOptions="Center"
+                        Text="&#xf141;"
+                        TextColor="Black"
+                        VerticalOptions="Center" />
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BackCommand}" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+
+                <Border
+                    Padding="0"
+                    Background="white"
+                    HeightRequest="40"
+                    HorizontalOptions="EndAndExpand"
+                    StrokeShape="RoundRectangle 20,20,20,20"
+                    StrokeThickness="1"
+                    WidthRequest="40">
+
+                    <Label
+                        FontFamily="MaterialIcon"
+                        FontSize="26"
+                        HorizontalOptions="Center"
+                        Text="&#xf4d2;"
+                        TextColor="{Binding FavStatusColor}"
+                        VerticalOptions="Center" />
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding FavCommand}" CommandParameter="{Binding FavStatusColor}" />
+                    </Border.GestureRecognizers>
+                </Border>
+
+            </StackLayout>
+
+            <Border
+                Padding="0"
+                Background="White"
+                HeightRequest="80"
+                HorizontalOptions="FillAndExpand"
+                IsVisible="{Binding IsFooterVisible}"
+                StrokeShape="RoundRectangle 6,6,0,0"
+                StrokeThickness="1"
+                VerticalOptions="EndAndExpand">
+                <StackLayout Margin="24,0" Orientation="Horizontal">
+                    <StackLayout Spacing="0" VerticalOptions="CenterAndExpand">
+                        <Label
+                            FontSize="12"
+                            HorizontalOptions="Center"
+                            Text="PRICE"
+                            TextColor="#929292" />
+                        <Label
+                            FontSize="18"
+                            HorizontalOptions="Center"
+                            Text="{Binding CartTotalPrice, StringFormat='{}{0:c}'}"
+                            TextColor="{StaticResource Primary}" />
+                    </StackLayout>
+
+                    <Button
+                        BackgroundColor="{StaticResource Primary}"
+                        HorizontalOptions="EndAndExpand"
+                        Text="Add to Cart"
+                        Command="{Binding AddToCartCommand}"
+                        TextColor="White"
+                        VerticalOptions="CenterAndExpand" />
+                </StackLayout>
+            </Border>
+        </Grid>
+        <ActivityIndicator
+            HeightRequest="45"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsLoaded, Converter={StaticResource InverseBoolConverter}}"
+            VerticalOptions="Center"
+            WidthRequest="45"
+            Color="{StaticResource Primary}" />
+    </Grid>
+</ContentPage>
