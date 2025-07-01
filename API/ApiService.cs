@@ -14,8 +14,8 @@ public class ApiService : IApiService
     public ApiService(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        //_httpClient.BaseAddress = new Uri("https://dev.newyorkerconcept.com/api/v1/");
-        _httpClient.BaseAddress = new Uri("https://777c-2404-160-8322-87e3-5536-5124-e482-1e03.ngrok-free.app/api/v1/");
+        _httpClient.BaseAddress = new Uri("https://dev.newyorkerconcept.com/api/v1/");
+        //_httpClient.BaseAddress = new Uri("https://777c-2404-160-8322-87e3-5536-5124-e482-1e03.ngrok-free.app/api/v1/");
     }
 
     public async Task<LoginResponseModel?> LoginAsync(string email, string password)
