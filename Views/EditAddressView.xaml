@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="NYC.MobileApp.Views.EditAddressView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:NYC.MobileApp.Controls"
+    xmlns:vm="clr-namespace:NYC.MobileApp.ViewModel"
+    x:Name="EditAddressPage"
+    Title="Edit Address">
+
+    <ContentPage.Background>
+        <LinearGradientBrush EndPoint="0,1">
+            <GradientStop Offset="0.0" Color="White" />
+            <GradientStop Offset="0.4" Color="White" />
+            <GradientStop Offset="1.0" Color="#87CEEB" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <ScrollView>
+        <Grid
+            Margin="30,40,30,30"
+            RowDefinitions="Auto,*,Auto"
+            VerticalOptions="FillAndExpand">
+            
+            <Label
+                Grid.Row="0"
+                Text="Edit Address"
+                FontSize="24"
+                FontAttributes="Bold"
+                TextColor="Black"
+                HorizontalOptions="Center"
+                Margin="0,0,0,40" />
+            
+            <!-- Form Fields -->
+            <StackLayout Grid.Row="1" Spacing="25" VerticalOptions="Start">
+                
+                <!-- Name Field -->
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                    <Label
+                        Grid.Column="0"
+                        Text="Name:"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        VerticalOptions="Center"
+                        WidthRequest="100"
+                        HorizontalTextAlignment="End" />
+                    <Border
+                        Grid.Column="1"
+                        Background="White"
+                        StrokeShape="RoundRectangle 8"
+                        StrokeThickness="1"
+						HeightRequest="30"
+                        Stroke="Gray">
+                        <local:BorderlessEntry
+                            Text="{Binding Address.Name}"
+                            FontSize="16"
+                            TextColor="Black"
+                            BackgroundColor="Transparent"
+                            Margin="15,12,15,12"
+							HeightRequest="40"
+							VerticalTextAlignment="Center"
+							IsSpellCheckEnabled="False" />
+                    </Border>
+                </Grid>
+
+                <!-- Phone Field -->
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                    <Label
+                        Grid.Column="0"
+                        Text="Phone:"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        VerticalOptions="Center"
+                        WidthRequest="100"
+                        HorizontalTextAlignment="End" />
+                    <Border
+                        Grid.Column="1"
+                        Background="White"
+                        StrokeShape="RoundRectangle 8"
+                        StrokeThickness="1"
+						HeightRequest="30"
+                        Stroke="Gray">
+                        <local:BorderlessEntry
+                            Text="{Binding Address.Phone}"
+                            FontSize="16"
+                            TextColor="Black"
+                            BackgroundColor="Transparent"
+                            Keyboard="Telephone"
+                            Margin="15,12,15,12"
+							HeightRequest="40"
+							VerticalTextAlignment="Center"
+							IsSpellCheckEnabled="False" />
+                    </Border>
+                </Grid>
+
+                <!-- Address Field -->
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                    <Label
+                        Grid.Column="0"
+                        Text="Address1:"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        VerticalOptions="Center"
+                        WidthRequest="100"
+                        HorizontalTextAlignment="End" />
+                    <Border
+                        Grid.Column="1"
+                        Background="White"
+                        StrokeShape="RoundRectangle 8"
+                        StrokeThickness="1"
+						HeightRequest="30"
+                        Stroke="Gray">
+                        <local:BorderlessEntry
+                            Text="{Binding Address.Address1}"
+                            FontSize="16"
+                            TextColor="Black"
+                            BackgroundColor="Transparent"
+                            Margin="15,12,15,12"
+							HeightRequest="40"
+							VerticalTextAlignment="Center"
+							IsSpellCheckEnabled="False" />
+                    </Border>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                    <Label
+                        Grid.Column="0"
+                        Text="Address2:"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        VerticalOptions="Center"
+                        WidthRequest="100"
+                        HorizontalTextAlignment="End" />
+                    <Border
+                        Grid.Column="1"
+                        Background="White"
+                        StrokeShape="RoundRectangle 8"
+                        StrokeThickness="1"
+						HeightRequest="30"
+                        Stroke="Gray">
+                        <local:BorderlessEntry
+                            Text="{Binding Address.Address2}"
+                            FontSize="16"
+                            TextColor="Black"
+                            BackgroundColor="Transparent"
+                            Margin="15,12,15,12"
+							HeightRequest="40"
+							VerticalTextAlignment="Center"
+							IsSpellCheckEnabled="False" />
+                    </Border>
+                </Grid>
+
+                <!-- City Field -->
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                    <Label
+                        Grid.Column="0"
+                        Text="City:"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        VerticalOptions="Center"
+                        WidthRequest="100"
+                        HorizontalTextAlignment="End" />
+                    <Border
+                        Grid.Column="1"
+                        Background="White"
+                        StrokeShape="RoundRectangle 8"
+                        StrokeThickness="1"
+						HeightRequest="30"
+                        Stroke="Gray">
+                        <local:BorderlessEntry
+                            Text="{Binding Address.City}"
+                            FontSize="16"
+                            TextColor="Black"
+                            BackgroundColor="Transparent"
+                            Margin="15,12,15,12"
+							HeightRequest="40"
+							VerticalTextAlignment="Center"
+							IsSpellCheckEnabled="False" />
+                    </Border>
+                </Grid>
+
+                <!-- Post Code Field -->
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                    <Label
+                        Grid.Column="0"
+                        Text="Postal Code:"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        VerticalOptions="Center"
+                        WidthRequest="100"
+                        HorizontalTextAlignment="End" />
+                    <Border
+                        Grid.Column="1"
+                        Background="White"
+                        StrokeShape="RoundRectangle 8"
+                        StrokeThickness="1"
+						HeightRequest="30"
+                        Stroke="Gray">
+                        <local:BorderlessEntry
+                            Text="{Binding Address.PostalCode}"
+                            FontSize="16"
+                            TextColor="Black"
+                            BackgroundColor="Transparent"
+                            Keyboard="Numeric"
+                            Margin="15,12,15,12"
+							HeightRequest="40"
+							VerticalTextAlignment="Center"
+							IsSpellCheckEnabled="False" />
+                    </Border>
+                </Grid>
+
+                <!-- State Field -->
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="15">
+                    <Label
+                        Grid.Column="0"
+                        Text="State:"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="Black"
+                        VerticalOptions="Center"
+                        WidthRequest="100"
+                        HorizontalTextAlignment="End" />
+                    <Border
+                        Grid.Column="1"
+                        Background="White"
+                        StrokeShape="RoundRectangle 8"
+                        StrokeThickness="1"
+						HeightRequest="30"
+                        Stroke="Gray"
+						>
+                        <local:BorderlessEntry
+                            Text="{Binding Address.State}"
+                            FontSize="16"
+                            TextColor="Black"
+                            BackgroundColor="Transparent"
+                            Margin="15,12,15,12"
+							HeightRequest="40"
+							VerticalTextAlignment="Center"
+							IsSpellCheckEnabled="False" />
+                    </Border>
+                </Grid>
+            </StackLayout>
+
+            <!-- Action Buttons -->
+            <StackLayout 
+                Grid.Row="2" 
+                Orientation="Horizontal" 
+                HorizontalOptions="Center"
+                Spacing="30"
+                Margin="0,60,0,30">
+                
+                <Button
+                    Text="Save"
+                    BackgroundColor="#1e3a8a"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    HeightRequest="50"
+                    WidthRequest="220"
+                    CornerRadius="25"
+                    Command="{Binding SaveCommand}" />
+                
+                <Button
+                    Text="Cancel"
+                    BackgroundColor="#1e3a8a"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="18"
+                    HeightRequest="50"
+                    WidthRequest="220"
+                    CornerRadius="25"
+                    Command="{Binding CancelCommand}" />
+            </StackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>

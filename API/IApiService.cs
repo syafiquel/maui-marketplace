@@ -9,4 +9,6 @@ public interface IApiService
     Task<T> PostAsync<T>(string endpoint, object data);
     Task<T> PutAsync<T>(string endpoint, object data);
     Task DeleteAsync(string endpoint);
+    Task LogoutUserAsync();
+    Task<bool> ChangePasswordAsync(string currentPassword, string newPassword, string confirmedPassword);
 }

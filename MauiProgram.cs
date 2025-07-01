@@ -5,6 +5,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Hosting;
 using Microsoft.Maui.Hosting;
+using Microsoft.Maui.Handlers;
+using Microsoft.Maui.Platform;
+using Android.Content.Res;
 using NYC.MobileApp.API;
 using NYC.MobileApp.ViewModel;
 using NYC.MobileApp.Views;
@@ -52,6 +55,18 @@ public static class MauiProgram
 		builder.Logging.AddDebug();
 #endif
 		
+#if ANDROID
+    EntryHandler.Mapper.AppendToMapping(nameof(BorderlessEntry), (handler, view) =>
+    {
+        if (view is NYC.MobileApp.Controls.BorderlessEntry)
+        {
+            handler.PlatformView.Background = null;
+			handler.PlatformView.BackgroundTintList = ColorStateList.ValueOf(Android.Graphics.Color.Transparent);
+            //handler.PlatformView.SetBackgroundColor(Android.Graphics.Color.Transparent);
+            //handler.PlatformView.SetPadding(0, 0, 0, 0);
+        }
+    });
+#endif
 		builder.Services.AddViewModel<ProductDetailsViewModel, ProductDetailsView>();
 
 		return builder.Build();

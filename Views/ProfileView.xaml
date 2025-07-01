@@ -38,13 +38,13 @@
                     FontAttributes="Bold"
                     FontSize="26"
                     HorizontalOptions="CenterAndExpand"
-                    Text="Kean Yang"
+                    Text="{Binding Name}"
                     TextColor="Black"
                     VerticalTextAlignment="Center" />
                 <Label
                     FontSize="14"
                     HorizontalOptions="CenterAndExpand"
-                    Text="1selection@gmail.com"
+                    Text="{Binding Email}"
                     TextColor="Black"
                     VerticalTextAlignment="Center" />
             </StackLayout>

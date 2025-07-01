@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="NYC.MobileApp.Views.UserProfileView"
+             BackgroundColor="#F5F9FF"
+             Title="User Profile">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="20,40,20,20">
+
+        <!-- Profile Section -->
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Margin="0,0,0,0">
+            <!-- Rectangle Profile Placeholder -->
+           <Frame HeightRequest="70" WidthRequest="70" CornerRadius="35" Padding="0"
+                BackgroundColor="#E0E0E0" HasShadow="False" VerticalOptions="Start" Margin="0,0,15,0" IsClippedToBounds="True">
+                <Image Source="profile_icon.png" Aspect="AspectFit" />
+            </Frame>
+            <!-- Labels vertically aligned -->
+            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="5">
+                <Label Text="Name: TF Manager" FontAttributes="Bold" VerticalOptions="Center"/>
+                <Label Text="Company: Tong Fan Sdn. Bhd" FontAttributes="Bold" VerticalOptions="Center"/>
+                <Label Text="Role: Counter" FontAttributes="Bold" VerticalOptions="Center"/>
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- Horizontal Line with spacing -->
+        <BoxView Grid.Row="1" HeightRequest="1" BackgroundColor="#CCCCCC" HorizontalOptions="Fill"
+                 Margin="0,20,0,20"/>
+
+        <!-- Menu Section -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,*" Margin="0,0,0,0">
+            <!-- Address Book -->
+            <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                <Frame HeightRequest="70" WidthRequest="70" CornerRadius="8" Padding="0"
+                    BackgroundColor="#E0E0E0" HasShadow="False" Margin="0,0,0,5">
+                    <Image Source="addressbook_icon.png" Aspect="AspectFit">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnAddressBookTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                </Frame>
+                <Label Text="Address Book" HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+            <!-- Order History -->
+            <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                <Frame HeightRequest="70" WidthRequest="70" CornerRadius="8" Padding="0"
+                    BackgroundColor="#FFE0E0E0" HasShadow="False" Margin="0,0,0,5">
+                    <Image Source="orderhistory_icon.png" Aspect="AspectFit">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnOrderHistoryTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                </Frame>
+                <Label Text="Order History" HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- Action Buttons at the bottom -->
+        <VerticalStackLayout Grid.Row="3" Spacing="15" Margin="0,30,0,0" HorizontalOptions="Center">
+            <Button Text="CHANGE PASSWORD"
+                    BackgroundColor="#003366"
+                    TextColor="White"
+                    CornerRadius="20"
+                    HeightRequest="50"
+                    WidthRequest="220" 
+                    HorizontalOptions="Center"
+                    Clicked="OnChangePasswordTapped"/>
+            <Button Text="LOGOUT"
+                    BackgroundColor="#003366"
+                    TextColor="White"
+                    CornerRadius="20"
+                    HeightRequest="50"
+                    WidthRequest="220" 
+                    HorizontalOptions="Center"
+                    Clicked="OnLogoutTapped"/>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
