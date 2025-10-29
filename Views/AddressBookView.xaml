@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="NYC.MobileApp.Views.AddressBookView"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:NYC.MobileApp.Converters"
+    xmlns:vm="clr-namespace:NYC.MobileApp.ViewModel"
+    x:Name="AddressBookPage"
+    Title="Address Book">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:InverseBooleanConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding AddAddressCommand}"
+            IconImageSource="plus.png"
+            Text="Add" />
+    </ContentPage.ToolbarItems>
+
+    <Grid
+        Margin="15,12"
+        RowDefinitions="Auto,*"
+        VerticalOptions="FillAndExpand">
+        
+        <Border
+            Grid.Row="0"
+            Margin="0,10,0,20"
+            Background="White"
+            StrokeShape="RoundRectangle 25"
+            StrokeThickness="1"
+            Stroke="LightGray">
+            <Grid ColumnDefinitions="*,Auto">
+                <Entry
+                    Grid.Column="0"
+                    Margin="20,0"
+                    Placeholder="Search addresses..."
+                    Text="{Binding SearchText}"
+                    BackgroundColor="Transparent"
+                    FontSize="16" />
+                <Border
+                    Grid.Column="1"
+                    Margin="10,5"
+                    Background="{StaticResource Primary}"
+                    StrokeShape="RoundRectangle 20"
+                    StrokeThickness="0">
+                    <Label
+                        FontFamily="MaterialIcon"
+                        FontSize="20"
+                        HorizontalOptions="Center"
+                        Text="&#xf349;"
+                        TextColor="White"
+                        VerticalOptions="Center"
+                        Margin="10" />
+                </Border>
+            </Grid>
+        </Border>
+
+        <CollectionView
+            Grid.Row="1"
+            IsVisible="{Binding IsLoaded}"
+            ItemsSource="{Binding FilteredAddresses}"
+            BackgroundColor="Transparent">
+
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout
+                    HorizontalItemSpacing="0"
+                    Orientation="Vertical"
+                    Span="1"
+                    VerticalItemSpacing="10" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border
+                        Background="White"
+                        StrokeShape="RoundRectangle 12"
+                        StrokeThickness="1"
+                        Stroke="LightGray"
+                        Margin="0,5">
+                        <Grid
+                            Padding="20,15"
+                            RowDefinitions="Auto,Auto,Auto,Auto">
+                            
+                            <Label
+                                Grid.Row="0"
+                                FontAttributes="Bold"
+                                FontSize="18"
+                                Text="{Binding Name}"
+                                TextColor="Black"
+                                Margin="0,0,0,5" />
+                            
+                            <StackLayout Grid.Row="1" Orientation="Vertical" Margin="0,0,0,5">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label FontAttributes="Bold"
+                                        FontSize="14"
+                                        Text="Address:"
+                                        TextColor="Black"
+                                        VerticalOptions="Start"
+                                        WidthRequest="80"/>
+
+                                    <Label FontSize="14"
+                                        Text="{Binding FullAddress}"
+                                        TextColor="Black"
+                                        VerticalOptions="Start"
+                                        Margin="10,0,0,0"
+                                        LineBreakMode="WordWrap"
+                                        MaxLines="0"
+                                        WidthRequest="200"/>
+                                </StackLayout>
+                            </StackLayout>
+
+                            <StackLayout Grid.Row="2" Orientation="Vertical" Margin="0,0,0,15">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label FontAttributes="Bold"
+                                        FontSize="14"
+                                        Text="Tel:"
+                                        TextColor="Black"
+                                        VerticalOptions="Start"
+                                        WidthRequest="80"/>
+
+                                    <Label FontSize="14"
+                                        Text="{Binding Phone}"
+                                        TextColor="Black"
+                                        VerticalOptions="Start"
+                                        Margin="10,0,0,0"/>
+                                </StackLayout>
+                            </StackLayout>
+                            
+                            <StackLayout Grid.Row="3" Orientation="Horizontal" HorizontalOptions="End">
+                                <Button
+                                    Text="EDIT"
+                                    BackgroundColor="LightGray"
+                                    TextColor="Black"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    HeightRequest="40"
+                                    WidthRequest="80"
+                                    CornerRadius="6"
+                                    Margin="0,0,10,0"
+                                    Command="{Binding Source={x:Reference AddressBookPage}, Path=BindingContext.EditAddressCommand}"
+                                    CommandParameter="{Binding .}" />
+                                <Button
+                                    Text="DELETE"
+                                    BackgroundColor="Red"
+                                    TextColor="White"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    HeightRequest="40"
+                                    WidthRequest="80"
+                                    CornerRadius="6"
+                                    Command="{Binding Source={x:Reference AddressBookPage}, Path=BindingContext.DeleteAddressCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </StackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <ActivityIndicator
+            HeightRequest="45"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsLoaded, Converter={StaticResource InverseBoolConverter}}"
+            VerticalOptions="Center"
+            WidthRequest="45"
+            Color="{StaticResource Primary}" />
+    </Grid>
+</ContentPage>

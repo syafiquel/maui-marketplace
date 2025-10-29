@@ -12,7 +12,13 @@ public class LoginResponseModel
 
     [JsonPropertyName("expiresIn")]
     public double ExpiresIn { get; set; }
-    
+
     [JsonPropertyName("refreshToken")]
     public string RefreshToken { get; set; }
+
+    [JsonPropertyName("userEmail")]
+    public string UserEmail { get; set; }
+
+    [JsonPropertyName("userFullName")]
+    public string UserFullName { get; set; }
 }

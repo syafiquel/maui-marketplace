@@ -15,8 +15,9 @@ public class ApiService : IApiService
     {
         _httpClient = httpClient;
         _httpClient.BaseAddress = new Uri("https://dev.newyorkerconcept.com/api/v1/");
+        //_httpClient.BaseAddress = new Uri("https://777c-2404-160-8322-87e3-5536-5124-e482-1e03.ngrok-free.app/api/v1/");
     }
-    
+
     public async Task<LoginResponseModel?> LoginAsync(string email, string password)
     {
         var loginData = new { email = email, Password = password };
@@ -34,6 +35,8 @@ public class ApiService : IApiService
             Preferences.Set("BearerToken", result.AccessToken);
             Preferences.Set("TokenExpiresAt", DateTime.UtcNow.AddSeconds(result.ExpiresIn).ToString("o"));
             Preferences.Set("RefreshToke ", result.RefreshToken);
+            Preferences.Set("UserEmail", result.UserEmail);
+            Preferences.Set("UserFullName", result.UserFullName);
         }
 
         return result;
@@ -57,9 +60,9 @@ public class ApiService : IApiService
                     response = await _httpClient.GetAsync(endpoint);
                 }
             }
-            
+
             var json = await response.Content.ReadAsStringAsync();
-            
+
             return JsonSerializer.Deserialize<T>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
         catch (Exception e)
@@ -67,13 +70,13 @@ public class ApiService : IApiService
             Console.WriteLine(e);
             throw;
         }
-        
+
     }
 
     public async Task<T> PostAsync<T>(string endpoint, object data)
     {
         AddAuthorizationHeader();
-        
+
         var json = JsonSerializer.Serialize(data);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         var response = await _httpClient.PostAsync(endpoint, content);
@@ -88,7 +91,7 @@ public class ApiService : IApiService
                 response = await _httpClient.PostAsync(endpoint, content);
             }
         }
-        
+
         response.EnsureSuccessStatusCode();
         var responseJson = await response.Content.ReadAsStringAsync();
         return JsonSerializer.Deserialize<T>(responseJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -97,7 +100,7 @@ public class ApiService : IApiService
     public async Task<T> PutAsync<T>(string endpoint, object data)
     {
         AddAuthorizationHeader();
-        
+
         var json = JsonSerializer.Serialize(data);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         var response = await _httpClient.PutAsync(endpoint, content);
@@ -112,7 +115,7 @@ public class ApiService : IApiService
                 response = await _httpClient.PutAsync(endpoint, content);
             }
         }
-        
+
         response.EnsureSuccessStatusCode();
         var responseJson = await response.Content.ReadAsStringAsync();
         return JsonSerializer.Deserialize<T>(responseJson, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
@@ -121,7 +124,7 @@ public class ApiService : IApiService
     public async Task DeleteAsync(string endpoint)
     {
         AddAuthorizationHeader();
-        
+
         var response = await _httpClient.DeleteAsync(endpoint);
         if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
@@ -134,10 +137,10 @@ public class ApiService : IApiService
                 response = await _httpClient.DeleteAsync(endpoint);
             }
         }
-        
+
         response.EnsureSuccessStatusCode();
     }
-    
+
     private void AddAuthorizationHeader()
     {
         var bearerToken = Preferences.Get("BearerToken", null);
@@ -146,7 +149,7 @@ public class ApiService : IApiService
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
         }
     }
-    
+
     private async Task<bool> RefreshTokenAsync()
     {
         string refreshToken = Preferences.Get("RefreshToken", "");
@@ -194,14 +197,63 @@ public class ApiService : IApiService
         return false;
     }
 
-    private async Task LogoutUserAsync()
+    public async Task LogoutUserAsync()
     {
-        // Clear stored tokens
-        Preferences.Remove("BearerToken");
-        Preferences.Remove("RefreshToken");
-        Preferences.Remove("TokenExpiresAt");
 
-        // Redirect to login page
+        try
+        {
+            AddAuthorizationHeader();
+            Preferences.Remove("BearerToken");
+            Preferences.Remove("RefreshToken");
+            Preferences.Remove("TokenExpiresAt");
+            await _httpClient.PostAsync("auth/logout", null);
+
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Logout failed {ex.Message}", ex);
+        }
+
+
+
         Application.Current.MainPage = new LoginView();
     }
+
+    public async Task<bool> ChangePasswordAsync(string currentPassword, string newPassword, string confirmedPassword)
+    {
+        try
+        {
+            var changePasswordModel = new
+            {
+                CurrentPassword = currentPassword,
+                NewPassword = newPassword,
+                ConfirmedPassword = confirmedPassword
+            };
+
+            AddAuthorizationHeader();
+
+            var json = JsonSerializer.Serialize(changePasswordModel);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync("auth/change-password", content);
+
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                bool isRefreshed = await RefreshTokenAsync();
+                if (isRefreshed)
+                {
+                    AddAuthorizationHeader();
+                    response = await _httpClient.PutAsync("auth/change-password", content);
+                }
+            }
+
+            response.EnsureSuccessStatusCode();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Password change faileded {ex.Message}", ex);
+        }
+    }
+    
+
 }

@@ -3,6 +3,7 @@
     x:Class="NYC.MobileApp.Views.LoginView"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:NYC.MobileApp.Controls"
     xmlns:vm="clr-namespace:NYC.MobileApp.ViewModel"
     Title="Login">
     <ScrollView>
@@ -21,10 +22,21 @@
                         Text="Email"
                         TextColor="#929292"
                         VerticalOptions="Center" />
-                    <Entry
-                        FontSize="18"
-                        Placeholder="Enter Email"
-                        Text="{Binding Email}" />
+                    <Border
+                        Grid.Column="1"
+                        Background="White"
+                        StrokeShape="RoundRectangle 8"
+                        StrokeThickness="1"
+						HeightRequest="43"
+                        Stroke="Gray"
+						>
+                        <local:BorderlessEntry
+                            FontSize="18"
+                            TextColor="Black"
+                            BackgroundColor="Transparent"
+                            Placeholder="Enter Email"
+                            Text="{Binding Email}" />
+                    </Border>
                 </StackLayout>
                 <StackLayout Margin="0" Spacing="0">
                     <Label
@@ -33,11 +45,22 @@
                         Text="Password"
                         TextColor="#929292"
                         VerticalOptions="Center" />
-                    <Entry
-                        FontSize="18"
-                        IsPassword="True"
-                        Placeholder="Enter Password"
-                        Text="{Binding Password}" />
+                    <Border
+                        Grid.Column="1"
+                        Background="White"
+                        StrokeShape="RoundRectangle 8"
+                        StrokeThickness="1"
+						HeightRequest="43"
+                        Stroke="Gray"
+						>
+                        <local:BorderlessEntry
+                            FontSize="18"
+                            IsPassword="True"
+                            TextColor="Black"
+                            BackgroundColor="Transparent"
+                            Placeholder="Enter Password"
+                            Text="{Binding Password}" />
+                    </Border>
                 </StackLayout>
 
             </StackLayout>
